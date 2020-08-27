@@ -1,0 +1,42 @@
+.checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+  border: 2px solid #fff;
+  border-radius: 3px;
+  background: #fff;
+  opacity: 0.5;
+  padding: 2px;
+  padding-top: 1px;
+
+  &--checked {
+    opacity: 1;
+    //border-color: #ff009e;
+
+    path {
+      fill: map-get($colors, "primary") !important;
+    }
+  }
+
+  input {
+    appearance: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    outline: none;
+    cursor: pointer;
+  }
+
+  svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  path {
+    fill: #fff;
+  }
+}

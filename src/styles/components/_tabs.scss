@@ -1,0 +1,53 @@
+:root {
+  --tab-active: 0;
+}
+
+.tabs-nav {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: calc(100% / 3);
+    height: 2px;
+    bottom: 0;
+    left: calc(var(--tab-active) * (100% / 3));
+    transition: 0.3s;
+    background-color: map-get($colors, "primary");
+  }
+
+  &[data-tab-active="1"] {
+    --tab-active: 1;
+  }
+
+  &[data-tab-active="2"] {
+    --tab-active: 2;
+  }
+}
+
+.tab-nav {
+  font-size: 14px;
+  cursor: pointer;
+  background: transparent;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  position: relative;
+  text-transform: uppercase;
+  padding-bottom: 10px;
+  flex: 1;
+
+  &:hover {
+    &:not(.tab-nav--active) {
+      color: map-get($colors, "primary");
+    }
+  }
+
+  &--active {
+    color: map-get($colors, "primary");
+  }
+}

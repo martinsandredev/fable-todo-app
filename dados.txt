@@ -1,0 +1,40 @@
+
+type ViewProps = { message: string }
+
+let myView (props: ViewProps) =
+    div [] [str props.message]
+
+
+let rootView msg =
+    myView { message = msg }
+
+let square x = x * x
+
+let resultado =
+    [2;5;3;6]
+    |> Seq.map (square)
+    |> Seq.reduce (fun x y -> x * y)
+
+
+// let strings = ["a"; "b"]
+
+// Mutable variable to count the number of times we clicked the button
+let mutable count = 0
+let mutable searchValue = ""
+
+let myInput = document.querySelector("#input-search") :?> Browser.Types.HTMLInputElement
+
+let myButton = document.querySelector("#button-search") :?> Browser.Types.HTMLButtonElement
+
+let myResult = document.querySelector("result-search") :?> Browser.Types.HTMLDivElement
+
+// Register our listener
+myButton.onclick <- fun _ ->
+    searchValue <- myInput.value
+    myResult.innerHTML <- searchValue
+
+myInput.oninput <- fun _ ->
+    searchValue <- myInput.value
+    myResult.innerHTML <- searchValue
+
+<Compile Include="path/to/my/File.fs" />

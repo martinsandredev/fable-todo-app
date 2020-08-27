@@ -1,0 +1,26 @@
+.button {
+  border: none;
+  background: map-get($colors, "primary");
+  border-radius: 3px;
+  color: #fff;
+  height: 45px;
+  outline: none;
+  cursor: pointer;
+  padding: 0 20px;
+  font-weight: 500;
+  font-size: 16px;
+
+  &:hover {
+    background: map-get($colors, "primary-dark");
+  }
+
+  &--icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    padding: 0;
+    height: auto;
+  }
+}
