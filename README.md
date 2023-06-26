@@ -1,6 +1,6 @@
 # Fable Minimal App
 
-This is a small Fable app project so you can easily get started and add your own code easily in it.
+This is a small Todo App developed with F# and Fable to build to a Javascript web project.
 
 ## Requirements
 
