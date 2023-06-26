@@ -1,4 +1,4 @@
-# Fable Minimal App
+# Todo App
 
 This is a small Todo App developed with F# and Fable to build to a Javascript web project.
 
