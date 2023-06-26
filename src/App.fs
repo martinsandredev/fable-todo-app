@@ -13,13 +13,11 @@ open CheckBox
 open IconAngleDown
 open ClassList
 open Elmish.React
+open Model
 
 Fable.Core.JsInterop.importAll "./styles/main.scss"
 
-type ShowEnum =
-    | All
-    | Active
-    | Completed
+
 
 type Msg =
     | Failure of string
@@ -29,20 +27,7 @@ type Msg =
     | CompleteAll
     | UpdateField of string
     | Remove of int
-    | ChangeVisibility of ShowEnum
-
-
-type Entry =
-    { description: string
-      completed: bool
-      editing: bool
-      id: int }
-
-type Model =
-    { entries: Entry list
-      field: string
-      uid: int
-      visibility: ShowEnum }
+    | ChangeVisibility of Visibility
 
 let newEntry description id =
     { description = description
@@ -151,77 +136,6 @@ let viewList list dispatch =
         ]
     ]
 
-
-// let App =
-//     FunctionComponent.Of(fun () ->
-//         let field = Hooks.useState ("")
-//         let list = Hooks.useState ([])
-//         let activeTab = Hooks.useState (All)
-//         let uid = Hooks.useState (0)
-
-//         let onChange =
-//             (fun (event: Browser.Types.Event) -> field.update (event.Value))
-
-//         let onChangeTab =
-//             fun (show: ShowEnum) _ -> activeTab.update (show)
-
-//         let onAdd =
-//             (fun _ ->
-//                 if field.current <> System.String.Empty then
-//                     (list.update (fun list -> list @ [ newEntry field.current uid.current ])
-//                      field.update ("")
-//                      uid.update (fun uid -> uid + 1)))
-
-
-//         let onRemove id =
-//             (fun _ -> list.update (fun list -> list |> List.filter (fun item -> item.id <> id)))
-
-//         let onCompleted id =
-//             (fun _ ->
-//                 list.update (fun list ->
-//                     list
-//                     |> List.map (fun item -> if item.id = id then checkEntry item (not item.completed) else item)))
-
-//         let newTab title idTab =
-//             { Id = id
-//               Title = title
-//               Active = (activeTab.current = idTab)
-//               Content = (viewList (list.current |> List.filter (isVisible idTab)) onRemove onCompleted) }
-
-//         let isCompletedAll =
-//             (list.current
-//              |> List.filter (fun item -> item.completed)
-//              |> List.length) = list.current.Length
-
-//         let onCompleteAll =
-//             fun _ ->
-//                 list.update (fun list ->
-//                     list
-//                     |> List.map (fun item ->
-//                         { item with
-//                               completed = not isCompletedAll }))
-
-
-
-//         div [ classList [ ("todo", true)
-//                           ("todo--completed-all", isCompletedAll) ] ] [
-//             viewForm field.current onChange onAdd onCompleteAll
-//             Tabs
-//                 { Tabs =
-//                       [ (newTab "All" All)
-//                         (newTab "Active" Active)
-//                         (newTab "Completed" Completed) ]
-//                   OnChangeTab = fun id _ -> activeTab.update (id) }
-//         ])
-
-
-
-
-// let init () =
-//     ReactDom.render (App(), document.getElementById ("root"))
-
-// init ()
-
 let view model dispatch =
     let isAllCompleted =
         model.entries
@@ -251,32 +165,10 @@ let view model dispatch =
     ]
 
 
-let init =
-    function
-    | Some savedModel -> savedModel, []
-    | _ -> emptyModel, []
-
-module S =
-    let private STORAGE_KEY = "todo-app"
-
-    let private decoder =
-        Thoth.Json.Decode.Auto.generateDecoder<Model> ()
-
-    let load (): Model option =
-        Browser.WebStorage.localStorage.getItem (STORAGE_KEY)
-        |> unbox
-        |> Option.bind
-            (Thoth.Json.Decode.fromString decoder
-             >> function
-             | Ok r -> Some r
-             | _ -> None)
-
-    let save (model: Model) =
-        Browser.WebStorage.localStorage.setItem (STORAGE_KEY, Thoth.Json.Encode.Auto.toString (1, model))
 
 
 let setStorage (model: Model): Cmd<Msg> =
-    Cmd.OfFunc.attempt S.save model (string >> Failure)
+    Cmd.OfFunc.attempt Storage.save model (string >> Failure)
 
 let updateWithStorage (msg: Msg) (model: Model) =
     match msg with
@@ -285,6 +177,13 @@ let updateWithStorage (msg: Msg) (model: Model) =
         let (newModel, cmds) = update msg model
         newModel, Cmd.batch [ setStorage newModel; cmds ]
 
-Program.mkProgram (S.load >> init) updateWithStorage view
+
+
+let init =
+    function
+    | Some savedModel -> savedModel, []
+    | _ -> emptyModel, []
+
+Program.mkProgram (Storage.load >> init) updateWithStorage view
 |> Program.withReactBatched "root"
 |> Program.run

@@ -4,7 +4,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="types/CommonTypes.fs" />
+    <Compile Include="types/Model.fs" />
     <Compile Include="utils/ClassList.fs" />
+    <Compile Include="utils/Storage.fs" />
     <Compile Include="components/IconBase.fs" />
     <Compile Include="components/IconClose.fs" />
     <Compile Include="components/IconCheck.fs" />
